@@ -2,4 +2,5 @@
 platformio.sublime*
 platformio.pro*
 tests
+.pio
 research
