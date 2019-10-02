@@ -3,4 +3,5 @@ platformio.sublime*
 platformio.pro*
 tests
 .pio
+.vscode
 research
