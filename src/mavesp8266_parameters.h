@@ -48,6 +48,14 @@
 #define DEFAULT_UDP_HPORT       14550
 #define DEFAULT_UDP_CPORT       14555
 
+//-- Leds led defaults
+#define DEFAULT_LEDS_PIN         14
+#define DEFAULT_LEDS_COUNT       1
+#define DEFAULT_LEDS_MODE        1
+#define DEFAULT_LEDS_RED         255
+#define DEFAULT_LEDS_GREEN       0
+#define DEFAULT_LEDS_BLUE        0
+
 struct stMavEspParameters {
     char        id[MAVLINK_MSG_PARAM_VALUE_FIELD_PARAM_ID_LEN];
     void*       value;
@@ -89,6 +97,12 @@ public:
         ID_GATEWAYSTA,
         ID_SUBNETSTA,
         ID_UART,
+        ID_LEDSPIN,
+        ID_LEDSCOUNT,
+        ID_LEDSMODE,
+        ID_LEDSRED,
+        ID_LEDSGREEN,
+        ID_LEDSBLUE,
         ID_COUNT
     };
 
@@ -112,6 +126,12 @@ public:
     uint32_t    getWifiStaGateway           ();
     uint32_t    getWifiStaSubnet            ();
     uint32_t    getUartBaudRate             ();
+    uint8_t     getLedsPin             ();
+    uint8_t     getLedsCount           ();
+    uint8_t     getLedsMode            ();
+    uint8_t     getLedsRed             ();
+    uint8_t     getLedsGreen           ();
+    uint8_t     getLedsBlue            ();
 
     void        setDebugEnabled             (int8_t enabled);
     void        setWifiMode                 (int8_t mode);
@@ -127,6 +147,12 @@ public:
     void        setWifiStaSubnet            (uint32_t addr);
     void        setUartBaudRate             (uint32_t baud);
     void        setLocalIPAddress           (uint32_t ipAddress);
+    void        setLedsPin             (uint8_t pin);
+    void        setLedsCount           (uint8_t count);
+    void        setLedsMode            (uint8_t mode);
+    void        setLedsRed             (uint8_t red);
+    void        setLedsGreen           (uint8_t green);
+    void        setLedsBlue            (uint8_t blue);
 
     stMavEspParameters* getAt               (int index);
 

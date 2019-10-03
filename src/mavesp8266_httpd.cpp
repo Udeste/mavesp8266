@@ -51,21 +51,27 @@ const char PROGMEM kHEADER[]     = "<!doctype html><html><head><title>MavLink Br
 const char PROGMEM kBADARG[]     = "BAD ARGS";
 const char PROGMEM kAPPJSON[]    = "application/json";
 
-const char* kBAUD       = "baud";
-const char* kPWD        = "pwd";
-const char* kSSID       = "ssid";
-const char* kPWDSTA     = "pwdsta";
-const char* kSSIDSTA    = "ssidsta";
-const char* kIPSTA      = "ipsta";
-const char* kGATESTA    = "gatewaysta";
-const char* kSUBSTA     = "subnetsta";
-const char* kCPORT      = "cport";
-const char* kHPORT      = "hport";
-const char* kCHANNEL    = "channel";
-const char* kDEBUG      = "debug";
-const char* kREBOOT     = "reboot";
-const char* kPOSITION   = "position";
-const char* kMODE       = "mode";
+const char* kBAUD                 = "baud";
+const char* kPWD                  = "pwd";
+const char* kSSID                 = "ssid";
+const char* kPWDSTA               = "pwdsta";
+const char* kSSIDSTA              = "ssidsta";
+const char* kIPSTA                = "ipsta";
+const char* kGATESTA              = "gatewaysta";
+const char* kSUBSTA               = "subnetsta";
+const char* kCPORT                = "cport";
+const char* kHPORT                = "hport";
+const char* kCHANNEL              = "channel";
+const char* kDEBUG                = "debug";
+const char* kREBOOT               = "reboot";
+const char* kPOSITION             = "position";
+const char* kMODE                 = "mode";
+const char* kLEDSPIN              = "ledspin";
+const char* kLEDSCOUNT            = "ledscount";
+const char* kLEDSMODE             = "ledsmode";
+const char* kLEDSRED              = "ledsred";
+const char* kLEDSGREEN            = "ledsgreen";
+const char* kLEDSBLUE             = "ledsblue";
 
 const char* kFlashMaps[7] = {
     "512KB (256/256)",
@@ -275,7 +281,7 @@ static void handle_setup()
     message += "'><br>";
 
     message += "WiFi Channel:&nbsp;";
-    message += "<input type='text' name='channel' value='";
+    message += "<input type='number' name='channel' value='";
     message += getWorld()->getParameters()->getWifiChannel();
     message += "'><br>";
 
@@ -309,20 +315,62 @@ static void handle_setup()
     message += "'><br>";
 
     message += "Host Port:&nbsp;";
-    message += "<input type='text' name='hport' value='";
+    message += "<input type='number' name='hport' value='";
     message += getWorld()->getParameters()->getWifiUdpHport();
     message += "'><br>";
 
     message += "Client Port:&nbsp;";
-    message += "<input type='text' name='cport' value='";
+    message += "<input type='number' name='cport' value='";
     message += getWorld()->getParameters()->getWifiUdpCport();
     message += "'><br>";
-    
+
     message += "Baudrate:&nbsp;";
-    message += "<input type='text' name='baud' value='";
+    message += "<input type='number' name='baud' value='";
     message += getWorld()->getParameters()->getUartBaudRate();
     message += "'><br>";
-    
+
+    message += "Leds mode:&nbsp;";
+    message += "<input type='radio' name='ledsmode' value='0'";
+    if (getWorld()->getParameters()->getLedsMode() == 0) {
+        message += " checked";
+    }
+    message += ">OFF\n";
+    message += "<input type='radio' name='ledsmode' value='1'";
+    if (getWorld()->getParameters()->getLedsMode() == 1) {
+        message += " checked";
+    }
+    message += ">STATIC<br>\n";
+    message += "<input type='radio' name='ledsmode' value='2'";
+    if (getWorld()->getParameters()->getLedsMode() == 2) {
+        message += " checked";
+    }
+    message += ">I2C<br>\n";
+
+    message += "Leds Pin:&nbsp;";
+    message += "<input type='number' name='ledspin' value='";
+    message += getWorld()->getParameters()->getLedsPin();
+    message += "'><br>";
+
+    message += "Leds count:&nbsp;";
+    message += "<input type='number' name='ledscount' value='";
+    message += getWorld()->getParameters()->getLedsCount();
+    message += "'><br>";
+
+    message += "Leds Red:&nbsp;";
+    message += "<input type='number' name='ledsred' value='";
+    message += getWorld()->getParameters()->getLedsRed();
+    message += "'><br>";
+
+    message += "Leds Green:&nbsp;";
+    message += "<input type='number' name='ledsgreen' value='";
+    message += getWorld()->getParameters()->getLedsGreen();
+    message += "'><br>";
+
+    message += "Leds Blue:&nbsp;";
+    message += "<input type='number' name='ledsblue' value='";
+    message += getWorld()->getParameters()->getLedsBlue();
+    message += "'><br>";
+
     message += "<input type='submit' value='Save'>";
     message += "</form>";
     setNoCacheHeaders();
@@ -524,6 +572,30 @@ void handle_setParameters()
     if(webServer.hasArg(kMODE)) {
         ok = true;
         getWorld()->getParameters()->setWifiMode(webServer.arg(kMODE).toInt());
+    }
+    if(webServer.hasArg(kLEDSPIN)) {
+        ok = true;
+        getWorld()->getParameters()->setLedsPin(webServer.arg(kLEDSPIN).toInt());
+    }
+    if(webServer.hasArg(kLEDSCOUNT)) {
+        ok = true;
+        getWorld()->getParameters()->setLedsCount(webServer.arg(kLEDSCOUNT).toInt());
+    }
+    if(webServer.hasArg(kLEDSMODE)) {
+        ok = true;
+        getWorld()->getParameters()->setLedsMode(webServer.arg(kLEDSMODE).toInt());
+    }
+    if(webServer.hasArg(kLEDSRED)) {
+        ok = true;
+        getWorld()->getParameters()->setLedsRed(webServer.arg(kLEDSRED).toInt());
+    }
+    if(webServer.hasArg(kLEDSGREEN)) {
+        ok = true;
+        getWorld()->getParameters()->setLedsGreen(webServer.arg(kLEDSGREEN).toInt());
+    }
+    if(webServer.hasArg(kLEDSBLUE)) {
+        ok = true;
+        getWorld()->getParameters()->setLedsBlue(webServer.arg(kLEDSBLUE).toInt());
     }
     if(webServer.hasArg(kREBOOT)) {
         ok = true;
